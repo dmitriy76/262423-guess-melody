@@ -1,25 +1,34 @@
-let appScreen = document.querySelector(`.app .main`);
-let templates = document.querySelector(`#templates`).content;
-let screens = templates.querySelectorAll(`.main`);
+const appScreen = document.querySelector(`.app .main`);
+const templates = document.querySelector(`#templates`).content;
+
+let welcomeScreen = templates.querySelector(`.main--welcome`);
+let artistScreen = templates.querySelector(`.main--level-artist`);
+let genreScreen = templates.querySelector(`.main--level-genre`);
+let resultScreens = templates.querySelectorAll(`.main--result`);
+
+let orderedScreens = [welcomeScreen, artistScreen, genreScreen].concat([...resultScreens]);
 
 const LEFT_ARROW_KEY = 37;
 const RIGHT_ARROW_KEY = 39;
 
 let currentWindowNum = 0;
 
-let showScreen = function (number) {
-  appScreen.innerHTML = ``;
-  appScreen.appendChild(screens[number]);
+const showScreen = function (number) {
+  if (appScreen.children[0]) {
+    appScreen.removeChild(appScreen.children[0]);
+  }
+  appScreen.appendChild(orderedScreens[number]);
 };
 
-let changeScreen = function (e) {
-  e.preventDefault();
-  if (e.altKey && e.keyCode === LEFT_ARROW_KEY) {
-    currentWindowNum = (currentWindowNum > 0) ? (currentWindowNum - 1) : 0;
+const changeScreen = function (event) {
+  event.preventDefault();
+
+  if (event.altKey && event.keyCode === LEFT_ARROW_KEY) {
+    currentWindowNum = currentWindowNum > 0 ? (currentWindowNum - 1) : 0;
     showScreen(currentWindowNum);
   }
-  if (e.altKey && e.keyCode === RIGHT_ARROW_KEY) {
-    currentWindowNum = (currentWindowNum < screens.length - 1) ? (currentWindowNum + 1) : screens.length - 1;
+  if (event.altKey && event.keyCode === RIGHT_ARROW_KEY) {
+    currentWindowNum = currentWindowNum < orderedScreens.length - 1 ? (currentWindowNum + 1) : orderedScreens.length - 1;
     showScreen(currentWindowNum);
   }
 };
